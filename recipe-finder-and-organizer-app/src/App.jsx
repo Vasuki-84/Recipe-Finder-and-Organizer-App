@@ -6,6 +6,7 @@ import Footer from "./Components/Footer";
 import Discover from "./Pages/Discover";
 import Favorites from "./Pages/Favorites";
 import Collections from "./Pages/Collections";
+import Signup from "./Pages/Signup";
 import CustomCreations from "./Pages/CustomCreations";
 
 function App() {
@@ -18,7 +19,9 @@ function App() {
         <Route path="/discover" element={<Discover />} />
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/collections" element={<Collections />} />
-        <Route path="CustomCreations" element={<CustomCreations />} />
+        <Route path="/customCreations" element={<CustomCreations />} />
+
+        <Route path="/signup" element={<Signup />} />
       </Routes>
       <Footer />
     </div>
