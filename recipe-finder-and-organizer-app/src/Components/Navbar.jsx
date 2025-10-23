@@ -12,8 +12,10 @@ function Navbar() {
       <div className="flex justify-between items-center max-w-6xl mx-auto">
         {/* Logo */}
         <h1 className="text-2xl font-serif text-gray-800 flex items-center gap-2">
-          SmartChef <CookingPot size={24} />
-        </h1>
+          SmartChef    <div className="text-green-600 mb-2 "><CookingPot size={24} /></div>
+            </h1>
+        
+      
 
         {/* Desktop Menu */}
         <div className="hidden md:flex space-x-6 font-semibold">

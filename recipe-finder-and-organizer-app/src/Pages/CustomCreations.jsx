@@ -2,7 +2,7 @@ import React from 'react'
 
 function CustomCreations() {
   return (
-    <div>CustomCreations</div>
+    <div className='mt-20'>CustomCreations</div>
   )
 }
 

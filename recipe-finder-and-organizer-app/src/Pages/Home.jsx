@@ -1,12 +1,12 @@
-
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { Search } from "lucide-react";
 
 function Login() {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const handleCreateAccount = () => {
-    navigate("/signup"); 
+    navigate("/signup");
   };
 
   return (
@@ -17,8 +17,30 @@ function Login() {
           A free recipe keeper and meal planner
         </p>
       </div>
+
+      {/* search recipes */}
+      <div className="flex justify-center mt-6 mb-8">
+        <div className="relative flex items-center group w-full max-w-md">
+          <input
+            type="text"
+            placeholder="Search recipes..."
+            className="w-full px-4 py-2 border border-gray-300 rounded-l-xl focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-700 placeholder-gray-400 transition-all"
+          />
+          <button
+            type="button"
+            className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-r-xl hover:bg-green-700 transition-all group"
+          >
+            <Search
+              size={16}
+              className="group-hover:scale-110 transition-transform"
+            />
+            <span className="font-medium hidden sm:inline">Search</span>
+          </button>
+        </div>
+      </div>
+
       <div className="bg-white p-6 rounded-2xl shadow-md w-full max-w-md text-center">
-        <h1 className="text-2xl font-semibold mb-4">Welcome Back</h1>
+        <h1 className="text-2xl font-semibold mb-4">Add a new Recipe</h1>
         <input
           type="email"
           placeholder="Email"

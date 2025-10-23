@@ -1,5 +1,3 @@
-
-
 import React, { useState } from "react";
 import { CookingPot } from "lucide-react";
 import { Eye, EyeOff } from "lucide-react";
@@ -7,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function Signup() {
-   const [showPassword, setShowPassword] = useState(false);
-   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -19,7 +17,7 @@ function Signup() {
 
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-   const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -29,8 +27,8 @@ function Signup() {
     });
   };
 
-   const handleCreateAccount = () => {
-    navigate("/"); 
+  const handleCreateAccount = () => {
+    navigate("/CustomCreations");
   };
 
   const handleSubmit = async (e) => {
@@ -57,7 +55,7 @@ function Signup() {
     if (!formData.termsAccepted) {
       setError("You must accept the Terms and Conditions.");
       setMessage("");
-      
+
       return;
     }
 
@@ -69,7 +67,7 @@ function Signup() {
       });
 
       setMessage("Signup successful!");
-    
+
       setError("");
       setFormData({
         name: "",
@@ -78,7 +76,7 @@ function Signup() {
         confirmPassword: "",
         termsAccepted: false,
       });
-        handleCreateAccount();
+      handleCreateAccount();
     } catch (err) {
       console.error("Error saving user:", err);
       setError("Error occurred while signing up.");
@@ -87,8 +85,8 @@ function Signup() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-200  ">
-      <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md mt-23">
+    <div className="flex items-center justify-center min-h-screen bg-gray-200">
+      <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md mt-23 mb-5 mx-auto ">
         <div className="flex flex-col items-center mb-4">
           <div className="text-green-600 mb-2 ">
             {" "}
@@ -102,7 +100,7 @@ function Signup() {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-5 ">
           {/* Name */}
           <div>
             <label className="block mb-1 font-semibold text-gray-700">
@@ -168,7 +166,7 @@ function Signup() {
               placeholder="Re-enter password"
               className="w-full border-b-2 border-gray-300 px-3 py-2 focus:outline-none focus:border-orange-500"
             />
-              <button
+            <button
               type="button"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               className="absolute right-1 top-8 text-gray-500"
@@ -209,11 +207,9 @@ function Signup() {
         )}
         {message && (
           <p className="text-center mt-4 text-green-600 font-medium">
-            {message} 
-          
+            {message}
           </p>
         )}
-        
       </div>
     </div>
   );
