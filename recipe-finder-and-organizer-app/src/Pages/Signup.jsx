@@ -27,6 +27,7 @@ function Signup() {
     });
   };
 
+  // for navigate to custom recipes page
   const handleCreateAccount = () => {
     navigate("/CustomCreations");
   };

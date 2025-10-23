@@ -3,20 +3,22 @@ import { useNavigate } from "react-router-dom";
 import { Search } from "lucide-react";
 
 function Login() {
+  // for navigate to signup page
   const navigate = useNavigate();
-
   const handleCreateAccount = () => {
     navigate("/signup");
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100  mt-4 " >
+        
       <div className="flex flex-col gap-5 text-center  ">
         <h2 className="text-5xl mb-1 ">All of your recipes in one place</h2>
         <p className="text-xl text-gray-700  mb-5">
           A free recipe keeper and meal planner
         </p>
       </div>
+      
 
       {/* search recipes */}
       <div className="flex justify-center mt-6 mb-8">
@@ -39,6 +41,7 @@ function Login() {
         </div>
       </div>
 
+      {/* for adding new recipes */}
       <div className="bg-white p-6 rounded-2xl shadow-md w-full max-w-md text-center">
         <h1 className="text-2xl font-semibold mb-4">Add a new Recipe</h1>
         <input
@@ -56,7 +59,7 @@ function Login() {
         </button>
 
         <p className="text-gray-500 text-sm mt-3">
-          Don’t have an account?{" "}
+          Don't have an account?{" "}
           <button
             onClick={handleCreateAccount}
             className="text-blue-600 font-medium hover:underline"
