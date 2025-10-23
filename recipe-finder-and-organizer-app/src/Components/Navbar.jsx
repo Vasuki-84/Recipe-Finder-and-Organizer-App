@@ -1,37 +1,58 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { CookingPot } from "lucide-react";
+import { CookingPot, Menu, X } from "lucide-react";
 
 function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleMenu = () => setIsOpen(!isOpen);
+
   return (
-    <div>
-      <nav className="flex justify-between items-center px-8 py-4 bg-white shadow-md">
-        <h1 className="text-2xl font-serif text-gray-800 flex gap-2">
-          SmartChef{" "}
-          <span className="mt-1">
-            <CookingPot size={20} />
-          </span>
+    <nav className="bg-white shadow-md px-6 py-4 fixed w-full z-20 top-0 left-0">
+      <div className="flex justify-between items-center max-w-6xl mx-auto">
+        {/* Logo */}
+        <h1 className="text-2xl font-serif text-gray-800 flex items-center gap-2">
+          SmartChef <CookingPot size={24} />
         </h1>
-        <div className="space-x-4">
-          <Link className="text-blue-600 font-semibold" to="/">
+
+        {/* Desktop Menu */}
+        <div className="hidden md:flex space-x-6 font-semibold">
+          <Link to="/">Home</Link>
+          <Link to="/discover">Discover</Link>
+          <Link to="/Favorites">Favorites</Link>
+          <Link to="/Collections">Collections</Link>
+          <Link to="/CustomCreations">Custom Creations</Link>
+        </div>
+
+        {/* Hamburger Button */}
+        <div className="md:hidden">
+          <button onClick={toggleMenu}>
+            {isOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      {isOpen && (
+        <div className="md:hidden mt-4 bg-white shadow-lg rounded-lg py-4 px-6 space-y-3 animate-slide-down">
+          <Link onClick={toggleMenu} className="block font-semibold" to="/">
             Home
           </Link>
-          <Link className="text-blue-600 font-semibold" to="/discover">
+          <Link onClick={toggleMenu} className="block font-semibold" to="/discover">
             Discover
           </Link>
-          <Link className="text-blue-600 font-semibold" to="/Favorites">
-            Favorites 
+          <Link onClick={toggleMenu} className="block font-semibold" to="/Favorites">
+            Favorites
           </Link>
-          <Link className="text-blue-600 font-semibold" to="/Collections">
-           Collections
+          <Link onClick={toggleMenu} className="block font-semibold" to="/Collections">
+            Collections
           </Link>
-
-          <Link className="text-blue-600 font-semibold" to="/CustomCreations">
-            Custom creations
+          <Link onClick={toggleMenu} className="block font-semibold" to="/CustomCreations">
+            Custom Creations
           </Link>
         </div>
-      </nav>
-    </div>
+      )}
+    </nav>
   );
 }
 

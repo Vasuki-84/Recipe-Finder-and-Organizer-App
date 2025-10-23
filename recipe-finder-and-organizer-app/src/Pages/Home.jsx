@@ -13,7 +13,7 @@ function Login() {
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <div className="flex flex-col gap-5 text-center  ">
         <h2 className="text-5xl mb-1 ">All of your recipes in one place</h2>
-        <p className="text-xl text-gray-700  mb-2">
+        <p className="text-xl text-gray-700  mb-5">
           A free recipe keeper and meal planner
         </p>
       </div>
@@ -29,11 +29,11 @@ function Login() {
           placeholder="Password"
           className="w-full mb-3 p-2 border rounded-lg"
         />
-        <button className="w-full bg-blue-600 text-white py-2 rounded-lg mb-3 hover:bg-blue-700 transition">
+        <button className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg transition-all">
           Log In
         </button>
 
-        <p className="text-gray-500 text-sm">
+        <p className="text-gray-500 text-sm mt-3">
           Don’t have an account?{" "}
           <button
             onClick={handleCreateAccount}
