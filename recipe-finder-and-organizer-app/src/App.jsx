@@ -6,7 +6,8 @@ import Footer from "./Components/Footer";
 import Favorites from "./Pages/Favorites";
 import Collections from "./Pages/Collections";
 import Signup from "./Pages/Signup";
-import Login from "./Pages/Home";
+import Login from "./Pages/Login";
+import AddRecipes from "./Pages/AddRecipes";
 
 function App() {
   return (
@@ -19,6 +20,8 @@ function App() {
         <Route path="/collections" element={<Collections />} />
         <Route path="/Signup" element={ <Signup/>}/>
         <Route path="/login" element={ <Login/>} />
+        <Route path="/AddRecipes" element={ <AddRecipes/>}/>
+       
        
       </Routes>
       <Footer />

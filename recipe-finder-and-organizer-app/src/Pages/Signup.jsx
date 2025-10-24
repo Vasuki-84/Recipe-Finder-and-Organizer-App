@@ -29,8 +29,12 @@ function Signup() {
 
   // for navigate to custom recipes page
   const handleCreateAccount = () => {
-    navigate("/CustomCreations");
+    navigate("/Login");
   };
+
+  // const termsConditions = () => {
+  //   navigate("");
+  // }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -56,11 +60,21 @@ function Signup() {
     if (!formData.termsAccepted) {
       setError("You must accept the Terms and Conditions.");
       setMessage("");
-
       return;
     }
 
     try {
+      // Fetch all users from db.json
+      const res = await axios.get("http://localhost:5000/users");
+
+      // Check if the entered email already exists
+      const existingUser = res.data.find((u) => u.email === formData.email);
+
+      //  If yes, show error and stop signup
+      if (existingUser) {
+        setError("Email already exists!");
+        return;
+      }
       await axios.post("http://localhost:5000/users", {
         name: formData.name,
         email: formData.email,
@@ -77,6 +91,7 @@ function Signup() {
         confirmPassword: "",
         termsAccepted: false,
       });
+     
       handleCreateAccount();
     } catch (err) {
       console.error("Error saving user:", err);
@@ -148,7 +163,7 @@ function Signup() {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-1 top-8 text-gray-500"
+              className="absolute right-1 top-8 text-gray-500  hover:bg-gray-200 px-2 py-2 rounded-full"
             >
               {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>
@@ -170,9 +185,9 @@ function Signup() {
             <button
               type="button"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute right-1 top-8 text-gray-500"
+              className="absolute right-1 top-8 text-gray-500 hover:bg-gray-200 px-2 py-2 rounded-full"
             >
-              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>
           </div>
 

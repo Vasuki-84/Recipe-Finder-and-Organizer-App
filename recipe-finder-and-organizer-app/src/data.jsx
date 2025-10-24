@@ -2,7 +2,7 @@ export const navbarLinks = [
     {
         id: 1,
         title: "Home",
-        link: "/home"
+        link: "/"
     },
     {
         id: 2,
