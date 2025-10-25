@@ -105,11 +105,11 @@ function Signup() {
       <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md mt-23 mb-5 mx-auto ">
         <div className="flex flex-col items-center mb-4   ">
          
-          <div className="text-green-600   border border-white/30 backdrop-blur-md" >
+          <div className="text-green-600  border-white/30 backdrop-blur-md" >
             {" "}
             <CookingPot size={30} />
           </div>
-          <h2 className="font-semibold text-3xl  ">Welcome!</h2>
+          <h2 className="font-semibold text-3xl  drop-shadow  ">Welcome!</h2>
           <p className="text-sm m mt-2 text-black ">
             We need a few details to create your account.
             <br />

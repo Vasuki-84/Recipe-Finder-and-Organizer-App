@@ -44,7 +44,7 @@ function Login() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100  mt-4 ">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100  mt-4 bg-[url('https://i.pinimg.com/1200x/be/c6/6b/bec66b9c4e110e27abf664e9afc7065f.jpg')] bg-fixed bg-cover h-screen w-full">
       {/* for adding new recipes */}
       <div className="bg-white p-6 rounded-2xl shadow-md w-full max-w-md text-center">
         <h1 className="text-2xl font-semibold mb-4">Log In</h1>
