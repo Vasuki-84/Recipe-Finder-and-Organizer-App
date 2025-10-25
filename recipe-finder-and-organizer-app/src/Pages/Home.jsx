@@ -6,11 +6,11 @@ function Login() {
   
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100  mt-4 " >
+    <div className="flex flex-col items-center justify-center min-h-screen  bg-[url('https://i.pinimg.com/1200x/be/c6/6b/bec66b9c4e110e27abf664e9afc7065f.jpg')] bg-fixed bg-cover h-screen w-full" >
         
       <div className="flex flex-col gap-5 text-center  ">
-        <h2 className="text-5xl mb-1 ">All of your recipes in one place</h2>
-        <p className="text-xl text-gray-700  mb-5">
+        <h2 className="text-5xl mb-1 font-serif  text-wrap ">All of your recipes in one place</h2>
+        <p className="text-xl text-gray-700  mb-5 font-mono">
           A free recipe keeper and meal planner
         </p>
       </div>
@@ -22,7 +22,7 @@ function Login() {
           <input
             type="text"
             placeholder="Search recipes..."
-            className="w-full px-4 py-2 border border-gray-300 rounded-l-xl focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-700 placeholder-gray-400 transition-all"
+            className="w-full px-4 py-2 border border-gray-700 rounded-l-xl focus:border-none focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-700 placeholder-gray-500 transition-all sm:inline w-32 md:w-48 lg:w-64 xl:w-80 p-2"
           />
           <button
             type="button"
@@ -30,9 +30,9 @@ function Login() {
           >
             <Search
               size={16}
-              className="group-hover:scale-110 transition-transform"
+              className="group-hover:scale-110 transition-transform  "
             />
-            <span className="font-medium hidden sm:inline">Search</span>
+            <span className="font-medium hidden sm:inline ">Search</span>
           </button>
         </div>
       </div>

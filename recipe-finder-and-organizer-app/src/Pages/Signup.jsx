@@ -101,22 +101,26 @@ function Signup() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-200">
+    <div className="flex items-center justify-center min-h-screen bg-gray-200 bg-[url('https://i.pinimg.com/1200x/be/c6/6b/bec66b9c4e110e27abf664e9afc7065f.jpg')] bg-fixed bg-cover h-screen w-full   ">
       <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md mt-23 mb-5 mx-auto ">
-        <div className="flex flex-col items-center mb-4">
-          <div className="text-green-600 mb-2 ">
+        <div className="flex flex-col items-center mb-4   ">
+         
+          <div className="text-green-600   border border-white/30 backdrop-blur-md" >
             {" "}
             <CookingPot size={30} />
           </div>
           <h2 className="font-semibold text-3xl  ">Welcome!</h2>
-          <p className="text-sm m mt-2 text-gray-600 ">
+          <p className="text-sm m mt-2 text-black ">
             We need a few details to create your account.
             <br />
             After this, you'll be set up and ready to go.
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5 ">
+        <form onSubmit={handleSubmit} className="space-y-5 space-x-3 ">
+           <div className="border border-white/30 backdrop-blur-md "
+           
+           >
           {/* Name */}
           <div>
             <label className="block mb-1 font-semibold text-gray-700">
@@ -128,7 +132,7 @@ function Signup() {
               value={formData.name}
               onChange={handleChange}
               placeholder="Enter your name"
-              className="w-full border-b-2 border-gray-300 px-3 py-2 focus:outline-none focus:border-orange-500"
+              className="w-full border-b-2 border-gray-300 px-3 py-2 focus:outline-none focus:border-orange-500 text-sm text-gray-500"
             />
           </div>
 
@@ -143,7 +147,7 @@ function Signup() {
               value={formData.email}
               onChange={handleChange}
               placeholder="Enter your email"
-              className="w-full border-b-2 border-gray-300 px-3 py-2 focus:outline-none focus:border-orange-500"
+              className="w-full border-b-2 border-gray-300 px-3 py-2 focus:outline-none focus:border-orange-500 text-sm text-gray-500"
             />
           </div>
 
@@ -158,7 +162,7 @@ function Signup() {
               value={formData.password}
               onChange={handleChange}
               placeholder="Enter password"
-              className="w-full border-b-2 border-gray-300 px-3 py-2 focus:outline-none focus:border-orange-500"
+              className="w-full border-b-2 border-gray-300 px-3 py-2 focus:outline-none focus:border-orange-500 text-sm text-gray-500"
             />
             <button
               type="button"
@@ -180,7 +184,7 @@ function Signup() {
               value={formData.confirmPassword}
               onChange={handleChange}
               placeholder="Re-enter password"
-              className="w-full border-b-2 border-gray-300 px-3 py-2 focus:outline-none focus:border-orange-500"
+              className="w-full border-b-2 border-gray-300 px-3 py-2 focus:outline-none focus:border-orange-500 text-sm text-gray-500"
             />
             <button
               type="button"
@@ -200,7 +204,7 @@ function Signup() {
               onChange={handleChange}
               className="accent-orange-500"
             />
-            <label className="text-gray-700 text-sm">
+            <label className="text-gray-700 text-sm m-2">
               I agree to the{" "}
               <span className="text-orange-600 font-semibold cursor-pointer hover:underline">
                 Terms and Conditions
@@ -215,6 +219,7 @@ function Signup() {
           >
             Sign Up
           </button>
+          </div>
         </form>
 
         {/* Messages */}
