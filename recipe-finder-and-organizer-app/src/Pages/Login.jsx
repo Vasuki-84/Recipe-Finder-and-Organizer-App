@@ -23,7 +23,7 @@ function Login() {
       // checks user exists or not
       if (findDetails) {
         localStorage.setItem("loggedInUser", JSON.stringify(findDetails));
-         navigate("/AddRecipes");
+         navigate("/Profile");
        
       } else {
         setError("Invalid email or password");
