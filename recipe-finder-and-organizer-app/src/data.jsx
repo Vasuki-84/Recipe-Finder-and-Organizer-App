@@ -23,6 +23,11 @@ export const navbarLinks = [
         id:5,
         title:"Login",
         link:"/login"
+    },
+    {
+        id:6,
+        title:"Logout",
+        link:"/"
     }
 
     

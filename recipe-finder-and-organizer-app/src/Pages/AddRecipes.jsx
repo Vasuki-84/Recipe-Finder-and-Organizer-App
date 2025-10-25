@@ -2,7 +2,7 @@ import React from 'react'
 
 function AddRecipes() {
   return (
-    <div>AddRecipes</div>
+    <div className='mt-20'> AddRecipes</div>
   )
 }
 

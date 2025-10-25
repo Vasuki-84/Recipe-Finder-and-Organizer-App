@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { CookingPot, Menu, X } from "lucide-react";
 import { navbarLinks } from "../data";
+import {useNavigate} from "react-router-dom"
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
