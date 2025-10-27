@@ -1,5 +1,5 @@
-
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Profile() {
   const [recipes, setRecipes] = useState([]);
@@ -72,8 +72,32 @@ function Profile() {
     setRecipes(updatedRecipes);
   };
 
+  const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("loggedInUser"));
+
+  const handleLogout = () => {
+    localStorage.removeItem("loggedInUser"); // Clear session
+    navigate("/"); // Redirect to home page
+  };
+
   return (
-    <div className="p-6 min-h-screen bg-gray-200">
+    <div className="p-6 min-h-screen bg-gray-200 mt-15 bg-[url('https://i.pinimg.com/1200x/be/c6/6b/bec66b9c4e110e27abf664e9afc7065f.jpg')] bg-fixed bg-cover min-h-screen w-ful">
+      {/* User Info Section */}
+      <div className="bg-white shadow-lg rounded-2xl p-6 text-center mb-6 max-w-md mx-auto">
+        <h2 className="text-2xl font-semibold mb-2 text-orange-600">
+          👋 Welcome, {user?.name || "Guest"}
+        </h2>
+        <p className="text-gray-700 mb-1">
+          <strong>Email:</strong> {user?.email}
+        </p>
+        <p className="text-gray-700 mb-3">
+          <strong>User ID:</strong> {user?.id || "N/A"}
+        </p>
+        <p className="text-gray-500">
+          You can add, edit, and manage your recipes below 🍳
+        </p>
+      </div>
+
       <h2 className="font-semibold text-3xl text-center mb-6 mt-6">
         Turn your kitchen experiments into recipes — add now 🍽️
       </h2>
@@ -179,10 +203,26 @@ function Profile() {
           ))
         )}
       </div>
+
+      {/* Logout  */}
+      <div className="flex flex-col items-center justify-center ">
+        <div className="bg-white shadow-lg rounded-2xl p-6 text-center">
+          <h2 className="text-2xl font-semibold mb-4">
+            Welcome, {user?.name || "Guest"} 👋
+          </h2>
+          <p className="text-gray-600 mb-6">
+            You can add, edit, or delete your recipes here.
+          </p>
+          <button
+            onClick={handleLogout}
+            className="bg-red-600 hover:bg-red-700 text-white py-2 px-6 rounded-lg transition-all"
+          >
+            Log Out
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
 
 export default Profile;
-
-
