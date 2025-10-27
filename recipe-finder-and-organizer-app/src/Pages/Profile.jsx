@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../redux/userSlice";
+
 
 function Profile() {
   const [recipes, setRecipes] = useState([]);
@@ -8,6 +11,9 @@ function Profile() {
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
   const [editIndex, setEditIndex] = useState(null);
+  const user = useSelector((state) => state.user.user); // access user data
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   // Load recipes from localStorage on component mount
   useEffect(() => {
@@ -72,13 +78,27 @@ function Profile() {
     setRecipes(updatedRecipes);
   };
 
-  const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("loggedInUser"));
+  // const navigate = useNavigate();
+  // const user = JSON.parse(localStorage.getItem("loggedInUser"));
 
-  const handleLogout = () => {
-    localStorage.removeItem("loggedInUser"); // Clear session
-    navigate("/"); // Redirect to home page
+  // const handleLogout = () => {
+  //   localStorage.removeItem("loggedInUser"); // Clear session
+  //   navigate("/"); // Redirect to home page
+  // }
+
+    const handleLogout = () => {
+    dispatch(logout());
+    navigate("/login");
   };
+    if (!user) {
+    return (
+      <div className="flex justify-center items-center h-screen text-xl">
+        No user found. Please log in again.
+      </div>
+    );
+  }
+
+  
 
   return (
     <div className="p-6 min-h-screen bg-gray-200 mt-15 bg-[url('https://i.pinimg.com/1200x/be/c6/6b/bec66b9c4e110e27abf664e9afc7065f.jpg')] bg-fixed bg-cover min-h-screen w-ful">
@@ -205,7 +225,7 @@ function Profile() {
       </div>
 
       {/* Logout  */}
-      <div className="flex flex-col items-center justify-center ">
+      {/* <div className="flex flex-col items-center justify-center ">
         <div className="bg-white shadow-lg rounded-2xl p-6 text-center">
           <h2 className="text-2xl font-semibold mb-4">
             Welcome, {user?.name || "Guest"} 👋
@@ -220,6 +240,21 @@ function Profile() {
             Log Out
           </button>
         </div>
+      </div> */}
+       <div className="bg-white shadow-lg rounded-2xl p-6 text-center">
+        <h2 className="text-2xl font-semibold mb-4">
+          Welcome, {user?.name || "Guest"} 👋
+        </h2>
+        <p className="text-gray-600 mb-6">
+          You can add, edit, or delete your recipes here.
+        </p>
+
+        <button
+          onClick={handleLogout}
+          className="bg-red-600 hover:bg-red-700 text-white py-2 px-6 rounded-lg transition-all"
+        >
+          Log Out
+        </button>
       </div>
     </div>
   );

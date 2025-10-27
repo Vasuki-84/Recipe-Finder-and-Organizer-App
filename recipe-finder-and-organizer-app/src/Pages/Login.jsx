@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+import { useDispatch } from "react-redux";
+import { login } from "../redux/userSlice";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -22,10 +25,13 @@ function Login() {
       );
 
       // checks user exists or not
-      if (findDetails) {
-        localStorage.setItem("loggedInUser", JSON.stringify(findDetails));
-         navigate("/Profile");
-       
+      // if (findDetails) {
+      //   localStorage.setItem("loggedInUser", JSON.stringify(findDetails));
+      //   navigate("/Profile");
+      // }
+      if(findDetails) {
+        dispatch(login(findDetails));
+        navigate("/profile");
       } else {
         setError("Invalid email or password");
       }
@@ -77,7 +83,6 @@ function Login() {
 }
 
 export default Login;
-
 
 // import React, { useState } from "react";
 // import { useNavigate } from "react-router-dom";
@@ -140,4 +145,3 @@ export default Login;
 // }
 
 // export default Login;
-
