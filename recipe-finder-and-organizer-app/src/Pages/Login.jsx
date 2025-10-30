@@ -10,7 +10,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch(); // to access datas from redux-store
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -23,15 +23,12 @@ function Login() {
       const findDetails = user.find(
         (u) => u.email === email && u.password === password
       );
-
-      // checks user exists or not
-      // if (findDetails) {
-      //   localStorage.setItem("loggedInUser", JSON.stringify(findDetails));
-      //   navigate("/Profile");
-      // }
-      if(findDetails) {
+      if (findDetails) {
         dispatch(login(findDetails));
+        localStorage.setItem("loggedInUser", JSON.stringify(findDetails)); //  store in localStorage (keeps user logged in after refresh)
+
         navigate("/profile");
+        e.preventDefault();
       } else {
         setError("Invalid email or password");
       }
@@ -41,6 +38,7 @@ function Login() {
     }
   };
 
+  // sent the email & password to the localStorage
   const handleInput = (e) => {
     const { name, value } = e.target;
     if (name === "email") {
@@ -51,7 +49,7 @@ function Login() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100  mt-4 bg-[url('https://i.pinimg.com/1200x/be/c6/6b/bec66b9c4e110e27abf664e9afc7065f.jpg')] bg-fixed bg-cover h-screen w-full">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100  mt-4 h-screen w-full">
       {/* for adding new recipes */}
       <div className="bg-white p-6 rounded-2xl shadow-md w-full max-w-md text-center">
         <h1 className="text-2xl font-semibold mb-4">Log In</h1>
@@ -83,65 +81,3 @@ function Login() {
 }
 
 export default Login;
-
-// import React, { useState } from "react";
-// import { useNavigate } from "react-router-dom";
-// import axios from "axios";
-
-// function Login() {
-//   const [email, setEmail] = useState("");
-//   const [password, setPassword] = useState("");
-//   const [error, setError] = useState("");
-//   const navigate = useNavigate();
-
-//   const handleLogin = async (e) => {
-//     e.preventDefault();
-
-//     try {
-//       const res = await axios.get("http://localhost:5000/users");
-//       const user = res.data.find(
-//         (u) => u.email === email && u.password === password
-//       );
-
-//       if (user) {
-//         localStorage.setItem("loggedInUser", JSON.stringify(user));
-//         navigate("/profile");
-//       } else {
-//         setError("Invalid email or password");
-//       }
-//     } catch (err) {
-//       console.error(err);
-//       setError("Something went wrong");
-//     }
-//   };
-
-//   return (
-//     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 bg-[url('https://i.pinimg.com/1200x/be/c6/6b/bec66b9c4e110e27abf664e9afc7065f.jpg')] bg-cover">
-//       <div className="bg-white p-6 rounded-2xl shadow-md w-full max-w-md text-center">
-//         <h1 className="text-2xl font-semibold mb-4">Log In</h1>
-//         <form onSubmit={handleLogin}>
-//           <input
-//             type="email"
-//             placeholder="Email"
-//             value={email}
-//             onChange={(e) => setEmail(e.target.value)}
-//             className="w-full mb-3 p-2 border rounded-lg"
-//           />
-//           <input
-//             type="password"
-//             placeholder="Password"
-//             value={password}
-//             onChange={(e) => setPassword(e.target.value)}
-//             className="w-full mb-3 p-2 border rounded-lg"
-//           />
-//           <button className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg transition-all">
-//             Log In
-//           </button>
-//           {error && <p className="text-red-600 mt-2">{error}</p>}
-//         </form>
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default Login;

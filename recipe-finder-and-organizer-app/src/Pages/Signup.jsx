@@ -32,9 +32,6 @@ function Signup() {
     navigate("/Login");
   };
 
-  // const termsConditions = () => {
-  //   navigate("");
-  // }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -101,7 +98,7 @@ function Signup() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-200 bg-[url('https://i.pinimg.com/1200x/be/c6/6b/bec66b9c4e110e27abf664e9afc7065f.jpg')] bg-fixed bg-cover h-screen w-full   ">
+    <div className="flex items-center justify-center min-h-screen bg-gray-200  h-screen w-full   ">
       <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md mt-23 mb-5 mx-auto ">
         <div className="flex flex-col items-center mb-4   ">
          

@@ -1,19 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
+const storedUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
 const userSlice = createSlice({
   name: "user",
-  initialState: { user: null },
+  initialState:{  user: storedUser || null, }, //  Keep user logged in after refresh
   reducers: {
     login: (state, action) => {
       state.user = action.payload;
-      localStorage.setItem("loggedInUser", JSON.stringify(action.payload)); // persist
+      localStorage.setItem("loggedInUser", JSON.stringify(action.payload)); 
     },
     logout: (state) => {
       state.user = null;
-      localStorage.removeItem("loggedInUser"); // clear
+      localStorage.removeItem("loggedInUser"); 
     },
     loadUser: (state) => {
-      const storedUser = localStorage.getItem("loggedInUser");
+      const storedUser = localStorage.getItem("loggedInUser");  // stores the user details even we refresh
       if (storedUser) {
         state.user = JSON.parse(storedUser);
       }

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../redux/userSlice";
-
+import axios from "axios";
 
 function Profile() {
   const [recipes, setRecipes] = useState([]);
@@ -10,59 +10,110 @@ function Profile() {
   const [ingredients, setIngredients] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
+  // const [homeRecipes]
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
   const [editIndex, setEditIndex] = useState(null);
-  const user = useSelector((state) => state.user.user); // access user data
+
+  const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // Load recipes from localStorage on component mount
+  // ✅ Fetch recipes from db.json when page loads
   useEffect(() => {
-    const storedRecipes = JSON.parse(localStorage.getItem("recipes")) || [];
-    setRecipes(storedRecipes);
+    const fetchRecipes = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/recipes");
+        setRecipes(res.data);
+      } catch (err) {
+        console.error("Error fetching recipes:", err);
+      }
+    };
+    fetchRecipes();
   }, []);
 
-  // Save recipes to localStorage whenever they change
-  useEffect(() => {
-    localStorage.setItem("recipes", JSON.stringify(recipes));
-  }, [recipes]);
-
-  // Handle image upload and convert to base64 string
-  const handleImageUpload = (e) => {
+  // ✅ Handle image upload (validation + preview)
+  const handleImageChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImage(reader.result); // Base64 string
-      };
-      reader.readAsDataURL(file);
+    if (!file) {
+      setError("Please select an image file.");
+      return;
     }
+    if (!file.type.startsWith("image/")) {
+      setError("Only image files are allowed.");
+      return;
+    }
+    if (file.size > 2 * 1024 * 1024) {
+      setError("Image must be less than 2MB.");
+      return;
+    }
+
+    setError("");
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImage(reader.result); // base64 image for saving in db.json
+    };
+    reader.readAsDataURL(file);
   };
 
-  // Add or update recipe
-  const handleAddOrUpdate = (e) => {
+  // ✅ Add or Update Recipe (POST or PUT)
+  const handleAddOrUpdate = async (e) => {
     e.preventDefault();
 
-    const newRecipe = { recipeName, ingredients, description, image };
-
-    if (editIndex !== null) {
-      // Update existing recipe
-      const updatedRecipes = [...recipes];
-      updatedRecipes[editIndex] = newRecipe;
-      setRecipes(updatedRecipes);
-      setEditIndex(null);
-    } else {
-      // Add new recipe
-      setRecipes([...recipes, newRecipe]);
+    if (!recipeName || !ingredients || !description) {
+      setError("Please fill all fields");
+      return;
     }
 
-    // Clear form
-    setRecipeName("");
-    setIngredients("");
-    setDescription("");
-    setImage(null);
+    const newRecipe = {
+      recipeName,
+      ingredients,
+      description,
+      image,
+      userId: user?.id,
+    };
+
+    try {
+      if (editIndex !== null) {
+        // Update recipe in db.json
+        const recipeId = recipes[editIndex].id;
+        const res = await axios.put(
+          `http://localhost:5000/recipes/${recipeId}`,
+          newRecipe
+        );
+
+        const updatedRecipes = [...recipes];
+        updatedRecipes[editIndex] = res.data;
+        setRecipes(updatedRecipes);
+        setMessage("Recipe updated successfully!");
+        setEditIndex(null);
+        setMessage.preventDefault();
+      } else {
+        // Add new recipe in db.json and home page
+        const res = await axios.post(
+          "http://localhost:5000/recipes",
+          newRecipe
+        );
+      
+        setRecipes([...recipes, res.data ]);
+
+        setMessage("Recipe added successfully!");
+       
+      }
+
+      // Clear form
+      setRecipeName("");
+      setIngredients("");
+      setDescription("");
+      setImage(null);
+      setError("");
+    } catch (err) {
+      console.error("Error adding/updating recipe:", err);
+      setError("Failed to save recipe");
+    }
   };
 
-  // Edit recipe
+  // ✅ Edit Recipe (load data into form)
   const handleEdit = (index) => {
     const recipeToEdit = recipes[index];
     setRecipeName(recipeToEdit.recipeName);
@@ -72,25 +123,26 @@ function Profile() {
     setEditIndex(index);
   };
 
-  // Delete recipe
-  const handleDelete = (index) => {
-    const updatedRecipes = recipes.filter((_, i) => i !== index);
-    setRecipes(updatedRecipes);
+  // ✅ Delete Recipe (DELETE request)
+  const handleDelete = async (index) => {
+    const recipeId = recipes[index].id;
+    try {
+      await axios.delete(`http://localhost:5000/recipes/${recipeId}`);
+      const updatedRecipes = recipes.filter((_, i) => i !== index);
+      setRecipes(updatedRecipes);
+    } catch (err) {
+      console.error("Error deleting recipe:", err);
+    }
   };
 
-  // const navigate = useNavigate();
-  // const user = JSON.parse(localStorage.getItem("loggedInUser"));
-
-  // const handleLogout = () => {
-  //   localStorage.removeItem("loggedInUser"); // Clear session
-  //   navigate("/"); // Redirect to home page
-  // }
-
-    const handleLogout = () => {
+  // Logout
+  const handleLogout = () => {
     dispatch(logout());
     navigate("/login");
   };
-    if (!user) {
+
+  //  Redirect if user not found
+  if (!user) {
     return (
       <div className="flex justify-center items-center h-screen text-xl">
         No user found. Please log in again.
@@ -98,86 +150,101 @@ function Profile() {
     );
   }
 
-  
-
   return (
-    <div className="p-6 min-h-screen bg-gray-200 mt-15 bg-[url('https://i.pinimg.com/1200x/be/c6/6b/bec66b9c4e110e27abf664e9afc7065f.jpg')] bg-fixed bg-cover min-h-screen w-ful">
+    <div className="p-6 min-h-screen bg-gray-200 mt-10">
       {/* User Info Section */}
-      <div className="bg-white shadow-lg rounded-2xl p-6 text-center mb-6 max-w-md mx-auto">
-        <h2 className="text-2xl font-semibold mb-2 text-orange-600">
-          👋 Welcome, {user?.name || "Guest"}
-        </h2>
-        <p className="text-gray-700 mb-1">
-          <strong>Email:</strong> {user?.email}
-        </p>
-        <p className="text-gray-700 mb-3">
-          <strong>User ID:</strong> {user?.id || "N/A"}
-        </p>
-        <p className="text-gray-500">
-          You can add, edit, and manage your recipes below 🍳
-        </p>
+      <div className="grid grid-cols-2 gap-4">
+        <div className="bg-white shadow-lg rounded-2xl p-6 text-center mb-6 max-w-md mx-auto mt-20">
+          <h2 className="text-2xl font-semibold mb-2 text-orange-600">
+            👋 Welcome, {user?.name || "Guest"}
+          </h2>
+          <p className="text-gray-700 mb-1">
+            <strong>Email:</strong> {user?.email}
+          </p>
+          <p className="text-gray-700 mb-3">
+            <strong>User ID:</strong> {user?.id || "N/A"}
+          </p>
+          <p className="text-gray-500">
+            You can add, edit, and manage your recipes below 🍳
+          </p>
+          <div className="flex flex-row gap-1 justify-center">
+            <p className="text-gray-600 mb-4">Are you sure you want to</p>
+            <button
+              onClick={handleLogout}
+              className="bg-red-600 hover:bg-red-700 text-white py-1 px-2 mt-2 rounded-lg transition-all"
+            >
+              Log Out
+            </button>
+          </div>
+        </div>
+
+        {/* Recipe Form */}
+        <div>
+          <h2 className="font-semibold text-3xl text-center mb-6 mt-6">
+            Turn your kitchen experiments into recipes — add now 🍽️
+          </h2>
+
+          <form
+            onSubmit={handleAddOrUpdate}
+            className="bg-white p-4 rounded-2xl max-w-md mx-auto shadow-2xl"
+          >
+            <h2 className="font-semibold text-2xl text-center mb-6">
+              {editIndex !== null ? "Edit Recipe" : "Add Your Recipe"}
+            </h2>
+
+            <label>Recipe Name</label>
+            <input
+              value={recipeName}
+              onChange={(e) => setRecipeName(e.target.value)}
+              className="border-b rounded w-full mb-3 border-gray-500 px-2 py-2 focus:outline-orange-400"
+              type="text"
+              required
+            />
+
+            <label>Ingredients</label>
+            <textarea
+              value={ingredients}
+              onChange={(e) => setIngredients(e.target.value)}
+              className="border-b rounded w-full mb-3 border-gray-500 px-2 py-2 focus:outline-orange-400"
+              required
+            ></textarea>
+
+            <label>Description</label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="border-b rounded w-full mb-3 border-gray-500 px-2 py-2 focus:outline-orange-400"
+              required
+            ></textarea>
+
+            <label>Upload Image</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="w-full mb-3 text-sm text-gray-600 border px-2"
+            />
+
+            {image && (
+              <img
+                src={image}
+                alt="Recipe preview"
+                className="w-full h-48 object-cover rounded-lg mb-3"
+              />
+            )}
+
+            {error && <p className="text-red-500">{error}</p>}
+            {message && <p className="text-green-600">{message}</p>}
+
+            <button
+              type="submit"
+              className="w-full bg-orange-500 hover:bg-orange-600 text-white p-2 mt-3 rounded-lg transition-all"
+            >
+              {editIndex !== null ? "Update Recipe" : "Add Recipe"}
+            </button>
+          </form>
+        </div>
       </div>
-
-      <h2 className="font-semibold text-3xl text-center mb-6 mt-6">
-        Turn your kitchen experiments into recipes — add now 🍽️
-      </h2>
-
-      <form
-        onSubmit={handleAddOrUpdate}
-        className="bg-white p-4 rounded-2xl max-w-md mx-auto shadow-2xl"
-      >
-        <h2 className="font-semibold text-2xl text-center mb-6">
-          {editIndex !== null ? "Edit Recipe" : "Add Your Recipe"}
-        </h2>
-
-        <label>Recipe Name</label>
-        <input
-          value={recipeName}
-          onChange={(e) => setRecipeName(e.target.value)}
-          className="border-b rounded w-full mb-3 border-gray-500 px-2 py-2 focus:outline-orange-400"
-          type="text"
-          required
-        />
-
-        <label>Ingredients</label>
-        <textarea
-          value={ingredients}
-          onChange={(e) => setIngredients(e.target.value)}
-          className="border-b rounded w-full mb-3 border-gray-500 px-2 py-2 focus:outline-orange-400 h-23"
-          required
-        ></textarea>
-
-        <label>Description</label>
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          className="border-b rounded w-full mb-3 border-gray-500 px-2 py-2 focus:outline-orange-400 h-23"
-          required
-        ></textarea>
-
-        <label>Upload Image</label>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageUpload}
-          className="w-full mb-3 text-sm text-gray-600"
-        />
-
-        {image && (
-          <img
-            src={image}
-            alt="Recipe preview"
-            className="w-full h-48 object-cover rounded-lg mb-3"
-          />
-        )}
-
-        <button
-          type="submit"
-          className="w-full bg-orange-500 hover:bg-orange-600 text-white p-2 mt-3 rounded-lg transition-all"
-        >
-          {editIndex !== null ? "Update Recipe" : "Add Recipe"}
-        </button>
-      </form>
 
       {/* Recipe List */}
       <div className="max-w-md mx-auto mt-8">
@@ -187,7 +254,7 @@ function Profile() {
         ) : (
           recipes.map((recipe, index) => (
             <div
-              key={index}
+              key={recipe.id || index}
               className="bg-white p-4 mb-4 rounded-lg shadow-md border border-gray-300"
             >
               {recipe.image && (
@@ -222,39 +289,6 @@ function Profile() {
             </div>
           ))
         )}
-      </div>
-
-      {/* Logout  */}
-      {/* <div className="flex flex-col items-center justify-center ">
-        <div className="bg-white shadow-lg rounded-2xl p-6 text-center">
-          <h2 className="text-2xl font-semibold mb-4">
-            Welcome, {user?.name || "Guest"} 👋
-          </h2>
-          <p className="text-gray-600 mb-6">
-            You can add, edit, or delete your recipes here.
-          </p>
-          <button
-            onClick={handleLogout}
-            className="bg-red-600 hover:bg-red-700 text-white py-2 px-6 rounded-lg transition-all"
-          >
-            Log Out
-          </button>
-        </div>
-      </div> */}
-       <div className="bg-white shadow-lg rounded-2xl p-6 text-center">
-        <h2 className="text-2xl font-semibold mb-4">
-          Welcome, {user?.name || "Guest"} 👋
-        </h2>
-        <p className="text-gray-600 mb-6">
-          You can add, edit, or delete your recipes here.
-        </p>
-
-        <button
-          onClick={handleLogout}
-          className="bg-red-600 hover:bg-red-700 text-white py-2 px-6 rounded-lg transition-all"
-        >
-          Log Out
-        </button>
       </div>
     </div>
   );
