@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Search , Heart } from "lucide-react";
+import { Search, Heart } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -20,7 +20,7 @@ function Login() {
     fetchRecipes();
   }, []);
 
-   // Fetch all favorites on page load
+  // Fetch all favorites on page load
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
@@ -40,47 +40,45 @@ function Login() {
 
   // toggle like / unlike
   const toggleLike = async (id) => {
-  const selectedRecipe = recipes.find((r) => r.id === id);
+    const selectedRecipe = recipes.find((r) => r.id === id);
 
-  setLikedRecipes((prev) => ({
-    ...prev,
-    [id]: !prev[id],
-  }));
+    setLikedRecipes((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
 
-  try {
-    if (!likedRecipes[id]) {
-      // ❤️ If user just liked the recipe — add to favorites
-      await axios.post("http://localhost:5000/favorites", selectedRecipe);
-      console.log("Added to favorites:", selectedRecipe);
-    } else {
-      // 💔 If user unliked — remove from favorites
-      const res = await axios.get(`http://localhost:5000/favorites`);
-      const favoriteToRemove = res.data.find((fav) => fav.id === id);
+    try {
+      if (!likedRecipes[id]) {
+        //  If user just liked the recipe — add to favorites
+        await axios.post("http://localhost:5000/favorites", selectedRecipe);
+        console.log("Added to favorites:", selectedRecipe);
+      } else {
+        //  If user unliked — remove from favorites
+        const res = await axios.get(`http://localhost:5000/favorites`);
+        const favoriteToRemove = res.data.find((fav) => fav.id === id);
 
-      if (favoriteToRemove) {
-        await axios.delete(`http://localhost:5000/favorites/${favoriteToRemove.id}`);
-        console.log("Removed from favorites:", favoriteToRemove);
+        if (favoriteToRemove) {
+          await axios.delete(
+            `http://localhost:5000/favorites/${favoriteToRemove.id}`
+          );
+          console.log("Removed from favorites:", favoriteToRemove);
+        }
       }
+    } catch (err) {
+      console.error("Error updating favorites:", err);
     }
-  } catch (err) {
-    console.error("Error updating favorites:", err);
-  }
-};
-
-
-
-  
+  };
 
   return (
     <div className="   ">
       {/* herosection */}
-      <div className="bg-[url('https://i.pinimg.com/1200x/be/c6/6b/bec66b9c4e110e27abf664e9afc7065f.jpg')] w-full bg-contain min-h-screen ">
+      <div className="bg-[url('https://i.pinimg.com/736x/55/c0/42/55c042e35195a82c9cc630c1d135cb7c.jpg')] w-full bg-cover min-h-screen  bg-fixed bg-center  md:bg-cover bg-no-repeat ...">
         <div className="  inset-0 backdrop-blur-sm bg-black/10 flex items-center justify-center flex flex-col items-center justify-center min-h-screen ">
-          <div className=" bg-green-500 px-10 py-20 text-left rounded-lg  indent-2 ">
-            <h2 className="text-6xl font-bold  mb-1  text-gray-800 text-wrap text-shadow-lg/20 ...  ">
+          <div className=" bg-green-600 shadow-lg px-10 py-20 text-left rounded-lg   ">
+            <h2 className="text-6xl font-bold  mb-1  text-white text-wrap text-shadow-lg/20 ...  ">
               Recipes Right <br /> for Your Family
             </h2>
-            <p className="text-xl text-gray-100 mb-5 mt-2  font-mono indent-1">
+            <p className="text-xl text-gray-100 mb-5 mt-2  font-mono">
               Have a picky eater? Short on time? Sort recipes <br /> by
               kid-friendly, prep time and more.
             </p>
@@ -169,7 +167,9 @@ function Login() {
                       <Heart
                         size={22}
                         fill={likedRecipes[recipe.id] ? "red" : "none"}
-                        stroke={likedRecipes[recipe.id] ? "red" : "currentColor"}
+                        stroke={
+                          likedRecipes[recipe.id] ? "red" : "currentColor"
+                        }
                       />
                     </button>
                   </div>

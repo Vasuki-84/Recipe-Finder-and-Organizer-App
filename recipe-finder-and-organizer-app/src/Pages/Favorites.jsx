@@ -18,11 +18,12 @@ function Favorites() {
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4 mt-20">❤️ Your Favorite Recipes</h2>
+      <h2 className="text-2xl font-bold mb-4 mt-20 text-center ">❤️ Your Favorite Recipes</h2>
       {favorites.length === 0 ? (
-        <p>No favorite recipes yet.</p>
+        <p className="text-center text-gray-600"> You haven't added any favorites yet. Go to the <strong>Home</strong> page and like a recipe!
+        </p>
       ) : (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {favorites.map((recipe) => (
             <div
               key={recipe.id}
