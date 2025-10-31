@@ -10,7 +10,6 @@ function Profile() {
   const [ingredients, setIngredients] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
-  // const [homeRecipes]
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [editIndex, setEditIndex] = useState(null);
@@ -19,7 +18,7 @@ function Profile() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // ✅ Fetch recipes from db.json when page loads
+  // Fetch recipes from db.json when page loads
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
@@ -29,10 +28,10 @@ function Profile() {
         console.error("Error fetching recipes:", err);
       }
     };
-    fetchRecipes();
-  }, []);
+    if (user) fetchRecipes();
+}, [user]);
 
-  // ✅ Handle image upload (validation + preview)
+  // Handle image upload 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (!file) {
@@ -56,7 +55,7 @@ function Profile() {
     reader.readAsDataURL(file);
   };
 
-  // ✅ Add or Update Recipe (POST or PUT)
+  //  Add or Update Recipe (POST or PUT)
   const handleAddOrUpdate = async (e) => {
     e.preventDefault();
 

@@ -3,13 +3,12 @@ import { Link } from "react-router-dom";
 import { CookingPot, Menu, X } from "lucide-react";
 import { navbarLinks } from "../data";
 
-import { useNavigate } from "react-router-dom";
+
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => setIsOpen(!isOpen);
-
 
   return (
     <nav className="bg-white shadow-md px-6 py-4 fixed w-full z-20 top-0 left-0">
@@ -26,15 +25,11 @@ function Navbar() {
         <div className="hidden md:flex space-x-6 font-semibold   ">
           <ul className="flex space-x-6  ">
             {navbarLinks.map((data) => (
-                
               <li
                 key={data.id}
-                className=" hover:text-green-400 motion-safe:transition motion-safe:hover:-translate-y-0.5 ..."
-              >  
-              
-              
-            
-                <Link to={data.link}>{data.title}</Link>
+                className=" flex gap-1  hover:text-green-400 motion-safe:transition motion-safe:hover:-translate-y-0.5 ..."
+              > <p className="mt-1">{data.icon}</p>
+                <Link to={data.link}> {data.title}</Link>
               </li>
             ))}
           </ul>
@@ -56,8 +51,8 @@ function Navbar() {
               key={data.id}
               to={data.link}
               onClick={toggleMenu}
-              className="block font-semibold   hover:text-green-400 motion-safe:transition motion-safe:hover:-translate-y-0.5 ..."
-            >
+              className=" flex gap-1 block font-semibold   hover:text-green-400 motion-safe:transition motion-safe:hover:-translate-y-0.5 ..."
+            > <p className="mt-1">{data.icon}</p>
               {data.title}
             </Link>
           ))}
