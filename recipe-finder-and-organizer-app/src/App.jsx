@@ -1,5 +1,3 @@
-
-
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Home from "./Pages/Home";
@@ -13,11 +11,9 @@ import Profile from "./Pages/Profile";
 
 function App() {
   return (
-   
     <div className="min-h-screen flex flex-col">
       <Navbar />
 
-     
       <main className="flex-grow">
         <Routes>
           <Route path="/" element={<Home />} />
@@ -25,7 +21,7 @@ function App() {
           <Route path="/collections" element={<Collections />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile/:id" element={<Profile />} />
         </Routes>
       </main>
       {/* Footer at the bottom */}
@@ -35,4 +31,3 @@ function App() {
 }
 
 export default App;
-

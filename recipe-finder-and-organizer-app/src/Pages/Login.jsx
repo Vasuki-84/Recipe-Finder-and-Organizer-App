@@ -26,7 +26,7 @@ function Login() {
         dispatch(login(findDetails));
         localStorage.setItem("loggedInUser", JSON.stringify(findDetails)); //  store in localStorage (keeps user logged in after refresh)
 
-        navigate("/profile");
+        navigate(`/profile/${findDetails.id}`);
         e.preventDefault();
       } else {
         setError("Invalid email or password");

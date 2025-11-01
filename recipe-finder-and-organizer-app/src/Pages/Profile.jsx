@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../redux/userSlice";
 import axios from "axios";
 
 function Profile() {
+  const { id } = useParams(); // ✅ Get user ID from URL
+  const user = useSelector((state) => state.user.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  // Local states
   const [recipes, setRecipes] = useState([]);
   const [recipeName, setRecipeName] = useState("");
   const [ingredients, setIngredients] = useState("");
@@ -13,25 +19,31 @@ function Profile() {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [editIndex, setEditIndex] = useState(null);
+  const [profileUser, setProfileUser] = useState(null);
 
-  const user = useSelector((state) => state.user.user);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  // ✅ Fetch user details by ID
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/users/${id}`)
+      .then((res) => setProfileUser(res.data))
+      .catch((err) => console.error("Error loading user:", err));
+  }, [id]);
 
-  // Fetch recipes from db.json when page loads
+  // ✅ Fetch recipes for this specific user
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
         const res = await axios.get("http://localhost:5000/recipes");
-        setRecipes(res.data);
+        const userRecipes = res.data.filter((r) => r.userId === Number(id));
+        setRecipes(userRecipes);
       } catch (err) {
         console.error("Error fetching recipes:", err);
       }
     };
-    if (user) fetchRecipes();
-}, [user]);
+    fetchRecipes();
+  }, [id]);
 
-  // Handle image upload 
+  // ✅ Handle image upload
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (!file) {
@@ -50,12 +62,12 @@ function Profile() {
     setError("");
     const reader = new FileReader();
     reader.onloadend = () => {
-      setImage(reader.result); // base64 image for saving in db.json
+      setImage(reader.result);
     };
     reader.readAsDataURL(file);
   };
 
-  //  Add or Update Recipe (POST or PUT)
+  // ✅ Add or Update Recipe
   const handleAddOrUpdate = async (e) => {
     e.preventDefault();
 
@@ -69,12 +81,12 @@ function Profile() {
       ingredients,
       description,
       image,
-      userId: user?.id,
+      userId: Number(id),
     };
 
     try {
       if (editIndex !== null) {
-        // Update recipe in db.json
+        // Update existing recipe
         const recipeId = recipes[editIndex].id;
         const res = await axios.put(
           `http://localhost:5000/recipes/${recipeId}`,
@@ -86,18 +98,14 @@ function Profile() {
         setRecipes(updatedRecipes);
         setMessage("Recipe updated successfully!");
         setEditIndex(null);
-        setMessage.preventDefault();
       } else {
-        // Add new recipe in db.json and home page
+        // Add new recipe
         const res = await axios.post(
           "http://localhost:5000/recipes",
           newRecipe
         );
-      
-        setRecipes([...recipes, res.data ]);
-
+        setRecipes([...recipes, res.data]);
         setMessage("Recipe added successfully!");
-       
       }
 
       // Clear form
@@ -112,7 +120,7 @@ function Profile() {
     }
   };
 
-  // ✅ Edit Recipe (load data into form)
+  // ✅ Edit Recipe
   const handleEdit = (index) => {
     const recipeToEdit = recipes[index];
     setRecipeName(recipeToEdit.recipeName);
@@ -122,7 +130,7 @@ function Profile() {
     setEditIndex(index);
   };
 
-  // ✅ Delete Recipe (DELETE request)
+  // ✅ Delete Recipe
   const handleDelete = async (index) => {
     const recipeId = recipes[index].id;
     try {
@@ -134,17 +142,17 @@ function Profile() {
     }
   };
 
-  // Logout
+  // ✅ Logout
   const handleLogout = () => {
     dispatch(logout());
     navigate("/login");
   };
 
-  //  Redirect if user not found
-  if (!user) {
+  // ✅ Show loading until user data is fetched
+  if (!profileUser) {
     return (
       <div className="flex justify-center items-center h-screen text-xl">
-        No user found. Please log in again.
+        Loading user profile...
       </div>
     );
   }
@@ -155,13 +163,13 @@ function Profile() {
       <div className="grid grid-cols-2 gap-4">
         <div className="bg-white shadow-lg rounded-2xl p-6 text-center mb-6 max-w-md mx-auto mt-20">
           <h2 className="text-2xl font-semibold mb-2 text-orange-600">
-            👋 Welcome, {user?.name || "Guest"}
+            👋 Welcome, {profileUser?.name || "Guest"}
           </h2>
           <p className="text-gray-700 mb-1">
-            <strong>Email:</strong> {user?.email}
+            <strong>Email:</strong> {profileUser?.email}
           </p>
           <p className="text-gray-700 mb-3">
-            <strong>User ID:</strong> {user?.id || "N/A"}
+            <strong>User ID:</strong> {profileUser?.id || "N/A"}
           </p>
           <p className="text-gray-500">
             You can add, edit, and manage your recipes below 🍳
