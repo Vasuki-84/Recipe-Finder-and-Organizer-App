@@ -98,7 +98,7 @@ function Signup() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-200  h-screen w-full   ">
+    <div className="flex items-center justify-center min-h-screen bg-green-100  h-screen w-full   ">
       <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md mt-23 mb-5 mx-auto ">
         <div className="flex flex-col items-center mb-4   ">
          

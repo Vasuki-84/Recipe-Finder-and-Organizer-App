@@ -87,8 +87,8 @@ function Login() {
       </div>
 
       {/* search recipes */}
-      <div className="bg-gray-100 ">
-        <div className="flex justify-center flex-col items-center   mb-8 ">
+      <div className="bg-green-100  ">
+        <div className="flex justify-center flex-col items-center    mb-8 ">
           <div className="mb-4 text-4xl font-bold  mt-4 text-center">
             {" "}
             <h2>Find Recipes </h2>
@@ -97,7 +97,7 @@ function Login() {
             </p>
           </div>
 
-          <div className="relative flex items-center group w-full max-w-md">
+          <div className="relative flex items-center group w-full max-w-md ">
             <input
               type="text"
               placeholder="Search recipes..."
@@ -126,11 +126,11 @@ function Login() {
               No recipes added yet. Go to <strong>Profile</strong> and add some!
             </p>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto ">
               {recipes.map((recipe, index) => (
                 <div
                   key={index}
-                  className="bg-white rounded-xl shadow-lg p-4 border border-gray-200 hover:shadow-xl transition-all duration-200"
+                  className="bg-white rounded-xl shadow-lg p-4 border border-gray-200  hover:shadow-2xl hover:border-solid hover:border-3 hover:border-green-500  focus:outline-green-500    transition-all duration-200 "
                 >
                   {/* Recipe Image */}
                   {recipe.image ? (
