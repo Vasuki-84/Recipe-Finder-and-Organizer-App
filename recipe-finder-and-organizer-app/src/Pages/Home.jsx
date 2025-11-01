@@ -87,7 +87,7 @@ function Login() {
       </div>
 
       {/* search recipes */}
-      <div className="bg-green-100  ">
+      <div className="bg-gray-100  ">
         <div className="flex justify-center flex-col items-center    mb-8 ">
           <div className="mb-4 text-4xl font-bold  mt-4 text-center">
             {" "}
