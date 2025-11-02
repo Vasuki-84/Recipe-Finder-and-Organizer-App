@@ -4,6 +4,7 @@ import { CookingPot, Menu, X ,LogOut } from "lucide-react";
 import { navbarLinks } from "../data";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../redux/userSlice";
+import { useNavigate } from "react-router-dom";
 
 
 function Navbar() {
@@ -16,7 +17,9 @@ function Navbar() {
   const handleLogout = () => {
     dispatch(logout());
     localStorage.removeItem("loggedInUser");
+    navigate("/")
   };
+
 
   return (
     <nav className="bg-gray-100 shadow-md px-6 py-4 fixed w-full z-20 top-0 left-0">
@@ -33,7 +36,7 @@ function Navbar() {
         <div className="hidden md:flex space-x-6 font-semibold">
           <ul className="flex space-x-6">
             {navbarLinks
-              // ✅ Hide Signup & Login if user is logged in, hide Profile if not logged in
+              //  Hide Signup & Login if user is logged in, hide Profile if not logged in
               .filter((data) =>
                 user
                   ? data.title !== "Signup" && data.title !== "Login"
@@ -49,13 +52,14 @@ function Navbar() {
                 </li>
               ))}
 
-            {/* ✅ Logout Button (Visible only if logged in) */}
+            {/*  Logout Button (Visible only if logged in) */}
             {user && (
               <button
                 onClick={handleLogout}
                 className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition-all"
               >
                 Logout
+                
               </button>
             )}
           </ul>

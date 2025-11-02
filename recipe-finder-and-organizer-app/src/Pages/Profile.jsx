@@ -3,9 +3,8 @@ import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../redux/userSlice";
 import { useNavigate } from "react-router-dom";
-import { Edit, Trash2, LogOut } from "lucide-react"; // ✅ Added icons
+import { Edit, Trash2, LogOut } from "lucide-react";
 import { useParams } from "react-router-dom";
-
 
 function Profile() {
   const navigate = useNavigate();
@@ -17,29 +16,33 @@ function Profile() {
   const [description, setDescription] = useState("");
   const [image, setImage] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
-  const [editingRecipe, setEditingRecipe] = useState(null); // ✅ new state for editing
-
+  const [editingRecipe, setEditingRecipe] = useState(null);
 
   const { id } = useParams(); // get user ID from URL
 
-// optional: verify correct user loaded
-useEffect(() => {
-  const storedUser = JSON.parse(localStorage.getItem("loggedInUser"));
-  if (!storedUser || storedUser.id !== parseInt(id)) {
-    navigate("/login"); // redirect if user mismatched or not logged in
-  }
-}, [id, navigate]);
+  //  verify correct user loaded
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    if (!storedUser || String(storedUser.id) !== String(id)) {
+      navigate("/login"); // redirect if user mismatched or not logged in
+    }
+  }, [id, navigate]);
 
-
-  // ✅ Fetch recipes from db.json
+  //  Fetch recipes from db.json
   useEffect(() => {
     axios
       .get("http://localhost:5000/recipes")
-      .then((res) => setRecipes(res.data))
+      .then((res) => {
+        //  Filter recipes belonging to the logged-in user only
+        const userRecipes = res.data.filter(
+          (r) => r.userEmail === loggedInUser?.email
+        );
+        setRecipes(userRecipes);
+      })
       .catch((err) => console.error("Error fetching recipes:", err));
-  }, []);
+  }, [loggedInUser]);
 
-  // ✅ Add / Update recipe
+  //  Add / Update recipe
   const handleAddOrUpdateRecipe = async (e) => {
     e.preventDefault();
 
@@ -48,23 +51,23 @@ useEffect(() => {
       ingredients,
       description,
       image: imagePreview || "",
+      userEmail: loggedInUser?.email,
+      userId: loggedInUser?.id, // if you have unique IDs
     };
 
     try {
       if (editingRecipe) {
-        // ✅ Update existing recipe
+        //  Update existing recipe
         const res = await axios.put(
           `http://localhost:5000/recipes/${editingRecipe.id}`,
           recipeData
         );
         setRecipes(
-          recipes.map((r) =>
-            r.id === editingRecipe.id ? res.data : r
-          )
+          recipes.map((r) => (r.id === editingRecipe.id ? res.data : r))
         );
         setEditingRecipe(null);
       } else {
-        // ✅ Add new recipe
+        //  Add new recipe
         const newRecipe = { id: Date.now(), ...recipeData };
         const res = await axios.post(
           "http://localhost:5000/recipes",
@@ -73,7 +76,7 @@ useEffect(() => {
         setRecipes([...recipes, res.data]);
       }
 
-      // ✅ Reset form
+      //  Reset form
       setRecipeName("");
       setIngredients("");
       setDescription("");
@@ -84,7 +87,7 @@ useEffect(() => {
     }
   };
 
-  // ✅ Edit recipe
+  //  Edit recipe
   const handleEdit = (recipe) => {
     setEditingRecipe(recipe);
     setRecipeName(recipe.recipeName);
@@ -94,7 +97,7 @@ useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" }); // scroll up to form
   };
 
-  // ✅ Delete recipe
+  //  Delete recipe
   const handleDelete = async (id) => {
     try {
       await axios.delete(`http://localhost:5000/recipes/${id}`);
@@ -104,14 +107,22 @@ useEffect(() => {
     }
   };
 
-  // ✅ Logout
+  //  Logout
   const handleLogout = () => {
+     const confirmLogout = window.confirm("Are you sure you want to log out?");
+  if (confirmLogout) {
     dispatch(logout());
     localStorage.removeItem("loggedInUser");
-    navigate("/login");
+   setTimeout(() => navigate("/login"), 0);
+  }
   };
+  useEffect(() => {
+    if (!loggedInUser) {
+      navigate("/login");
+    }
+  }, [loggedInUser, navigate]);
 
-  // ✅ Image upload (preview)
+  //  Image upload (preview)
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -139,9 +150,7 @@ useEffect(() => {
 
       {/* User Info */}
       <div className="bg-white rounded-xl shadow-md p-4 mb-8 w-full max-w-md">
-        <h2 className="text-xl font-bold mb-3 text-green-700">
-          User Details
-        </h2>
+        <h2 className="text-xl font-bold mb-3 text-green-700">User Details</h2>
         <p>
           <strong>User ID:</strong> {loggedInUser?.id}
         </p>
@@ -158,7 +167,10 @@ useEffect(() => {
         <h2 className="text-xl font-semibold mb-4 text-green-700">
           {editingRecipe ? "Edit Recipe" : "Add New Recipe"}
         </h2>
-        <form onSubmit={handleAddOrUpdateRecipe} className="flex flex-col gap-4">
+        <form
+          onSubmit={handleAddOrUpdateRecipe}
+          className="flex flex-col gap-4"
+        >
           <input
             type="text"
             placeholder="Recipe Name"

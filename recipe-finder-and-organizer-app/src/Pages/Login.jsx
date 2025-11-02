@@ -17,17 +17,17 @@ function Login() {
     try {
       const res = await axios.get("http://localhost:5000/users");
 
-      // ✅ Check user credentials
+      //  Check user credentials
       const user = res.data.find(
         (u) => u.email === email && u.password === password
       );
 
       if (user) {
-        // ✅ Store user in Redux + localStorage
+        //  Store user in Redux + localStorage
         dispatch(login(user));
         localStorage.setItem("loggedInUser", JSON.stringify(user));
 
-        // ✅ Navigate to user-specific profile (no preventDefault after this)
+        //  Navigate to user-specific profile (no preventDefault after this)
         console.log("User found:", user);
 
         navigate(`/profile/${user.id}`);
