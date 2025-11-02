@@ -25,7 +25,6 @@ function Login() {
     const fetchFavorites = async () => {
       try {
         const res = await axios.get("http://localhost:5000/favorites");
-        // create a map { [id]: true } for liked status
         const likedMap = {};
         res.data.forEach((fav) => {
           likedMap[fav.id] = true;
@@ -68,6 +67,7 @@ function Login() {
       console.error("Error updating favorites:", err);
     }
   };
+  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
   return (
     <div className="   ">
@@ -160,18 +160,21 @@ function Login() {
                     className=" rounded-xl p-4  transition-all duration-200 relative"
                   >
                     {/* Like Button */}
-                    <button
-                      onClick={() => toggleLike(recipe.id)}
-                      className="absolute top-2 right-1 text-gray-400 hover:text-red-500 transition-colors"
-                    >
-                      <Heart
-                        size={22}
-                        fill={likedRecipes[recipe.id] ? "red" : "none"}
-                        stroke={
-                          likedRecipes[recipe.id] ? "red" : "currentColor"
-                        }
-                      />
-                    </button>
+
+                    {loggedInUser && (
+                      <button
+                        onClick={() => toggleLike(recipe.id)}
+                        className="absolute top-2 right-1 text-gray-400 hover:text-red-500 transition-colors"
+                      >
+                        <Heart
+                          size={22}
+                          fill={likedRecipes[recipe.id] ? "red" : "none"}
+                          stroke={
+                            likedRecipes[recipe.id] ? "red" : "currentColor"
+                          }
+                        />
+                      </button>
+                    )}
                   </div>
                 </div>
               ))}
