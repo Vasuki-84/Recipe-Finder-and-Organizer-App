@@ -2,10 +2,12 @@ import { useNavigate } from "react-router-dom";
 import { Search, Heart } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 function Login() {
   const [recipes, setRecipes] = useState([]);
   const [likedRecipes, setLikedRecipes] = useState({});
+  const [searchTerm, setSearchTerm] = useState("");
 
   // fetch all the recipes
   useEffect(() => {
@@ -67,7 +69,11 @@ function Login() {
       console.error("Error updating favorites:", err);
     }
   };
-  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+  const loggedInUser = useSelector((state) => state.user.user);
+
+  const filteredRecipes = recipes.filter((recipe) =>
+    recipe.recipeName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="   ">
@@ -101,6 +107,8 @@ function Login() {
             <input
               type="text"
               placeholder="Search recipes..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full px-4 py-2 border border-gray-700 rounded-l-xl focus:border-none focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-700 placeholder-gray-500 transition-all sm:inline w-32 md:w-48 lg:w-64 xl:w-80 p-2"
             />
             <button
@@ -121,13 +129,13 @@ function Login() {
             🍲 Your Delicious Recipes
           </h2>
 
-          {recipes.length === 0 ? (
+          {filteredRecipes.length === 0 ? (
             <p className="text-center text-gray-500">
-              No recipes added yet. Go to <strong>Profile</strong> and add some!
+              No recipes found for “{searchTerm}”.
             </p>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto ">
-              {recipes.map((recipe, index) => (
+              {filteredRecipes.map((recipe, index) => (
                 <div
                   key={index}
                   className="bg-white rounded-xl shadow-lg p-4 border border-gray-200  hover:shadow-2xl hover:border-solid hover:border-3 hover:border-green-500  focus:outline-green-500    transition-all duration-200 "

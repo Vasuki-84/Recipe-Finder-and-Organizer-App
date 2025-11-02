@@ -149,7 +149,8 @@ function Profile() {
       </div>
 
       {/* User Info */}
-      <div className="bg-white rounded-xl shadow-md p-4 mb-8 w-full max-w-md">
+      <div className="grid grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 items-center justify-around mb-10">
+      <div className="bg-white rounded-xl shadow-md p-4 mb-8 w-full max-w-md span-1 ml-10 mt-0">
         <h2 className="text-xl font-bold mb-3 text-green-700">User Details</h2>
         <p>
           <strong>User ID:</strong> {loggedInUser?.id}
@@ -163,7 +164,7 @@ function Profile() {
       </div>
 
       {/* Add / Edit Recipe Section */}
-      <div className="bg-white p-6 rounded-xl shadow-md mb-10 max-w-xl">
+      <div className="bg-white p-6 rounded-xl shadow-md mb-10 max-w-xl span-2 ">
         <h2 className="text-xl font-semibold mb-4 text-green-700">
           {editingRecipe ? "Edit Recipe" : "Add New Recipe"}
         </h2>
@@ -218,10 +219,11 @@ function Profile() {
           </button>
         </form>
       </div>
+      </div>
 
       {/* Recipes List */}
       <div>
-        <h2 className="text-2xl font-semibold mb-4 text-green-700">
+        <h2 className="text-2xl font-semibold mb-4 text-green-700 text-center">
           All Recipes
         </h2>
         <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-6">
