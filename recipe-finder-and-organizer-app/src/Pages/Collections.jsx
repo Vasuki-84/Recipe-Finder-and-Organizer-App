@@ -1,82 +1,110 @@
-import React, { useState } from "react";
-import { collectionsData } from "../redux/CollectionsData.jsx";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 function Collections() {
-  // Track how many recipes to show per section
-  const [visibleCount, setVisibleCount] = useState({
-    breakfast: 4,
-    lunch: 4,
-    eveningSnacks: 4,
-    dinner: 4,
-  });
+  const [collections, setCollections] = useState([]);
+  const [filteredCollections, setFilteredCollections] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [category, setCategory] = useState("All");
 
-  // Toggle between show more and show less
-  const handleToggle = (mealType, totalRecipes) => {
-    setVisibleCount((prev) => ({
-      ...prev,
-      [mealType]: prev[mealType] === 4 ? totalRecipes : 4,
-    }));
-  };
+  // Fetch data from db.json
+  useEffect(() => {
+    const fetchCollections = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/collections");
+        setCollections(res.data);
+        setFilteredCollections(res.data);
+      } catch (err) {
+        console.error("Error fetching collections:", err);
+      }
+    };
+    fetchCollections();
+  }, []);
+
+  // Filter and search logic
+  useEffect(() => {
+    let filtered = collections;
+
+    if (category !== "All") {
+      filtered = filtered.filter(
+        (item) => item.category.toLowerCase() === category.toLowerCase()
+      );
+    }
+
+    if (searchTerm.trim() !== "") {
+      filtered = filtered.filter((item) =>
+        item.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    setFilteredCollections(filtered);
+  }, [searchTerm, category, collections]);
 
   return (
-    <div className="p-6  bg-gray-100 ">
-      <h1 className="text-4xl font-extrabold text-center mb-3 text-green-500 mt-20">
-        Discover Delicious Collections
+    <div className="min-h-screen bg-green-50 py-24 px-6">
+      <h1 className="text-4xl font-bold text-center text-green-700 mb-8">
+        🍴 Our Collections
       </h1>
-      <p className="text-center text-gray-600 mb-10">
-        Explore recipes curated for every time of the day — breakfast, lunch,
-        snacks, and dinner!
-      </p>
 
-      {Object.entries(collectionsData).map(([mealType, recipes]) => (
-        <div key={mealType} className="mb-10">
-          <h2 className="text-3xl font-bold capitalize mb-6 text-gray-800 text-green-500">
-            {mealType.replace(/([A-Z])/g, " $1")}
-          </h2>
+      {/* Search & Filter Controls */}
+      <div className="flex flex-col md:flex-row justify-center items-center gap-4 mb-10">
+        {/* Search Bar */}
+        <input
+          type="text"
+          placeholder="Search your favorite recipe..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="border border-gray-300 rounded-lg px-4 py-2 w-full md:w-80 focus:outline-none focus:ring-2 focus:ring-green-500"
+        />
 
-          {/* Recipe Grid */}
-          <div className="grid md:grid-cols-4 sm:grid-cols-2 gap-6 ">
-            {recipes.slice(0, visibleCount[mealType]).map((recipe, index) => (
-              <div
-                key={index}
-                className=" border rounded-xl shadow-md bg-white hover:shadow-lg hover:shadow-2xl hover:border-solid hover:border-3 hover:border-green-500  focus:outline-green-500    transition-all duration-100 "
-              >
-                <div className="overflow-hidden rounded-lg">
-                  <img
-                    src={recipe.image}
-                    alt={recipe.recipeName}
-                    className="w-full h-48 object-cover rounded-lg transition-transform duration-300 hover:scale-110"
-                  />
-                </div>
+        {/* Category Filter */}
+        <select
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          className="border border-gray-300 rounded-lg px-4 py-2 w-full md:w-60 focus:outline-none focus:ring-2 focus:ring-green-500"
+        >
+          <option value="All">All</option>
+          <option value="Breakfast">Breakfast</option>
+          <option value="Lunch">Lunch</option>
+          <option value="Evening Snacks">Evening Snacks</option>
+          <option value="Dinner">Dinner</option>
+        </select>
+      </div>
 
-                <h3 className=" px-4 font-semibold text-lg hover:text-green-600 mt-3 text-gray-900">
-                  {recipe.recipeName}
-                </h3>
-                <p className=" px-4 text-sm text-gray-600 mb-2">
-                  ⏱ {recipe.prepTime}
-                </p>
-                <p className=" px-4 text-gray-700 text-sm">
-                  <strong>Ingredients:</strong> {recipe.ingredients.join(", ")}
-                </p>
-                <p className=" px-4 pb-2 mt-2 text-gray-700 text-sm">
-                   <strong>Description:</strong>
-                  {recipe.description}
-                </p>
-              </div>
-            ))}
-          </div>
-
-          {/* Load More / Show Less Button */}
-          <div className="text-center mt-6">
-            <button
-              onClick={() => handleToggle(mealType, recipes.length)}
-              className="px-5 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition"
+      {/* Collections Grid */}
+      {filteredCollections.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filteredCollections.map((item) => (
+            <div
+              key={item.id}
+              className="bg-white shadow-md rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-300"
             >
-              {visibleCount[mealType] === 4 ? "Load More" : "Show Less"}
-            </button>
-          </div>
+              <img
+                src={item.image}
+                alt={item.title}
+                className="w-full h-56 object-cover"
+              />
+              <div className="p-5">
+                <h2 className="text-xl font-semibold text-green-700">
+                  {item.title}
+                </h2>
+                <p className="text-gray-600 mt-2 text-sm line-clamp-2">
+                  {item.description}
+                </p>
+                <div className="mt-3">
+                  <span className="inline-block bg-green-100 text-green-700 px-3 py-1 text-xs rounded-full">
+                    {item.category}
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
-      ))}
+      ) : (
+        <p className="text-center text-gray-500 mt-10 text-lg">
+          No recipes found.
+        </p>
+      )}
     </div>
   );
 }
