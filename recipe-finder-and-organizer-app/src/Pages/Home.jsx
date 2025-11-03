@@ -76,11 +76,11 @@ function Login() {
   );
 
   return (
-    <div className="   ">
+    <div >
       {/* herosection */}
       <div className="bg-[url('https://i.pinimg.com/736x/55/c0/42/55c042e35195a82c9cc630c1d135cb7c.jpg')] w-full bg-cover min-h-screen  bg-fixed bg-center  md:bg-cover bg-no-repeat ...">
         <div className="  inset-0 backdrop-blur-sm bg-black/10 flex items-center justify-center flex flex-col items-center justify-center min-h-screen ">
-          <div className=" bg-green-600 shadow-lg px-10 py-20 text-left rounded-lg   ">
+          <div className="  shadow-lg px-10 py-20 text-left rounded-lg  bg-green-600 shadow-[0_0_30px_10px_rgba(34,197,94,0.7)] px-10 py-20 text-left rounded-lg transition-all duration-500 ">
             <h2 className="text-6xl font-bold  mb-1  text-white text-wrap text-shadow-lg/20 ...  ">
               Recipes Right <br /> for Your Family
             </h2>
@@ -154,7 +154,7 @@ function Login() {
                   )}
 
                   {/* Recipe Info */}
-                  <h3 className="text-xl font-bold mb-2 text-orange-600">
+                  <h3 className="text-xl font-bold mb-2 text-green-600">
                     {recipe.recipeName}
                   </h3>
                   <p className="text-gray-700 mb-2">
