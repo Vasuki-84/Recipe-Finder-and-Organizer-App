@@ -19,8 +19,8 @@ function Collections() {
   };
 
   return (
-    <div className="p-6 mt-20">
-      <h1 className="text-4xl font-extrabold text-center mb-3 text-green-500">
+    <div className="p-6  bg-gray-100 ">
+      <h1 className="text-4xl font-extrabold text-center mb-3 text-green-500 mt-20">
         Discover Delicious Collections
       </h1>
       <p className="text-center text-gray-600 mb-10">
@@ -39,7 +39,7 @@ function Collections() {
             {recipes.slice(0, visibleCount[mealType]).map((recipe, index) => (
               <div
                 key={index}
-                className=" border rounded-xl shadow-md bg-white hover:shadow-lg transition-all hover:shadow-lg focus:outline-green-400 border hover:border-green-500  "
+                className=" border rounded-xl shadow-md bg-white hover:shadow-lg hover:shadow-2xl hover:border-solid hover:border-3 hover:border-green-500  focus:outline-green-500    transition-all duration-100 "
               >
                 <div className="overflow-hidden rounded-lg">
                   <img
@@ -59,6 +59,7 @@ function Collections() {
                   <strong>Ingredients:</strong> {recipe.ingredients.join(", ")}
                 </p>
                 <p className=" px-4 pb-2 mt-2 text-gray-700 text-sm">
+                   <strong>Description:</strong>
                   {recipe.description}
                 </p>
               </div>

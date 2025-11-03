@@ -8,8 +8,18 @@ import Collections from "./Pages/Collections";
 import Signup from "./Pages/Signup";
 import Login from "./Pages/Login";
 import Profile from "./Pages/Profile";
+import { login } from "./redux/userSlice";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 
 function App() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const storedUser = localStorage.getItem("loggedInUser");
+    if (storedUser) {
+      dispatch(login(JSON.parse(storedUser)));
+    }
+  }, [dispatch]);
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />

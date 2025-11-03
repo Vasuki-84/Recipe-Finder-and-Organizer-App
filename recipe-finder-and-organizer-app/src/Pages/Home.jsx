@@ -109,7 +109,7 @@ function Login() {
               placeholder="Search recipes..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-700 rounded-l-xl focus:border-none focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-700 placeholder-gray-500 transition-all sm:inline w-32 md:w-48 lg:w-64 xl:w-80 p-2"
+              className="w-full px-4 py-2 border border-gray-700 rounded-l focus:border-none focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-700 placeholder-gray-500 transition-all sm:inline w-32 md:w-48 lg:w-64 xl:w-80 p-2"
             />
             <button
               type="button"
