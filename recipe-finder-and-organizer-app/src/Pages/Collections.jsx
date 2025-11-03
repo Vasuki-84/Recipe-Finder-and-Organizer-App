@@ -73,11 +73,11 @@ function Collections() {
 
       {/* Collections Grid */}
       {filteredCollections.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-7">
           {filteredCollections.map((item) => (
             <div
               key={item.id}
-              className="bg-white shadow-md rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-300"
+              className="bg-white shadow-md rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-100 hover:shadow-lg hover:border-solid hover:border-3 hover:border-green-500  focus:outline-green-500    transition"
             >
               <img
                 src={item.image}

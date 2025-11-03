@@ -94,7 +94,7 @@ function Profile() {
     setIngredients(recipe.ingredients);
     setDescription(recipe.description);
     setImagePreview(recipe.image || null);
-    window.scrollTo({ top: 0, behavior: "smooth" }); // scroll up to form
+    window.scrollTo({ top: 0, behavior: "smooth" }); 
   };
 
   //  Delete recipe
@@ -136,7 +136,7 @@ function Profile() {
   return (
     <div className="min-h-screen bg-green-100 p-6">
       {/* Header */}
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between items-center mb-6 mt-20">
         <h1 className="text-3xl font-semibold">
           Welcome, {loggedInUser?.name || "User"}!
         </h1>
@@ -226,6 +226,13 @@ function Profile() {
         <h2 className="text-2xl font-semibold mb-4 text-green-700 text-center">
           All Recipes
         </h2>
+         {recipes.length === 0 ? (
+    //  If no recipes found
+    <p className="text-center text-gray-600 text-lg">
+      No recipes added yet. Start by adding your first recipe above! 🍳
+    </p>
+  ) : (
+    //  Else show all recipes
         <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-6">
           {recipes.map((r) => (
             <div
@@ -245,7 +252,7 @@ function Profile() {
               </p>
               <p className="text-sm text-gray-600 mt-1">{r.description}</p>
 
-              {/* ✅ Edit & Delete buttons */}
+              {/*  Edit & Delete buttons */}
               <div className="flex justify-end gap-3 mt-3">
                 <button
                   onClick={() => handleEdit(r)}
@@ -263,6 +270,7 @@ function Profile() {
             </div>
           ))}
         </div>
+  )}
       </div>
     </div>
   );

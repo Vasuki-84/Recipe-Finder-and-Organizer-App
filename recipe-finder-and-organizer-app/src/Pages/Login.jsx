@@ -47,7 +47,7 @@ function Login() {
   };
 
   return (
-    <div className="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-x-1 place-items-center justify-around items-center m-auto min-h-screen mt-4 h-screen w-full bg-green-100">
+    <div className="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-x-1 place-items-center justify-around items-center m-auto min-h-screen mt-4 min-h-screen w-full bg-green-100 ">
       <div className="mask-x-from-80% mask-x-to-100% h-screen mask-type-alpha backdrop-blur-sm">
         <img
           src="https://i.pinimg.com/736x/57/5f/29/575f29fc6cdfb3984e6649eb4e394a63.jpg"
@@ -56,7 +56,7 @@ function Login() {
       </div>
 
       <div>
-        <div className="rounded-2xl w-full max-w-md text-center">
+        <div className="rounded-2xl w-full max-w-md text-center mb-10">
           <h1 className="text-2xl font-semibold mb-10">Log In</h1>
 
           <form onSubmit={handleLogin}>

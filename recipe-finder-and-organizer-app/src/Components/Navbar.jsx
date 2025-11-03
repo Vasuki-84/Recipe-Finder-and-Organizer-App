@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { CookingPot, Menu, X, LogOut } from "lucide-react";
+import { CookingPot, Menu, X, LogOut , UserPen } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
 import { logout, loadUser } from "../redux/userSlice";
-import { navbarLinks } from "../data"; 
+import { navbarLinks } from "../data";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -68,7 +68,8 @@ function Navbar() {
           {navbarLinks
             .filter((data) => {
               //  Filter signup/login depending on state
-              if (user) return data.title !== "SignUp" && data.title !== "Login";
+              if (user)
+                return data.title !== "SignUp" && data.title !== "Login";
               if (signedUp) return data.title !== "SignUp";
               return true;
             })
@@ -84,8 +85,17 @@ function Navbar() {
                 {data.title}
               </Link>
             ))}
+          {/* Show Profile link when user is logged in */}
+          {user && (
+            <Link
+              to={`/profile/${user.id}`}
+              className="flex items-center gap-2 hover:text-orange-300 transition"
+            >
+                  <UserPen  size={18} /> Profile
+            </Link>
+          )}
 
-          {/* If logged in → show Logout */}
+          {/* If logged in , show Logout */}
           {user && (
             <button
               onClick={handleLogout}
@@ -110,7 +120,8 @@ function Navbar() {
         <div className="md:hidden bg-green-700 flex flex-col items-center py-3 space-y-3 font-medium">
           {navbarLinks
             .filter((data) => {
-              if (user) return data.title !== "SignUp" && data.title !== "Login";
+              if (user)
+                return data.title !== "SignUp" && data.title !== "Login";
               if (signedUp) return data.title !== "SignUp";
               return true;
             })

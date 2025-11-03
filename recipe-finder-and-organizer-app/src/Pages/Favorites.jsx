@@ -1,20 +1,32 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import axios from "axios";
 
 function Favorites() {
   const [favorites, setFavorites] = useState([]);
+    const user = useSelector((state) => state.user.user); // get logged-in user
+
 
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
         const res = await axios.get("http://localhost:5000/favorites");
-        setFavorites(res.data);
+         if (user) {
+          //  Filter only logged-in user's favorites
+          const userFavorites = res.data.filter(
+            (fav) => fav.userId === user.id
+          );
+          setFavorites(userFavorites);
+        } else {
+          setFavorites([]);
+        }
       } catch (err) {
         console.error("Error fetching favorites:", err);
       }
     };
+
     fetchFavorites();
-  }, []);
+  }, [user]);
 
   return (
     <div className="p-6">
@@ -23,11 +35,11 @@ function Favorites() {
         <p className="text-center text-gray-600"> You haven't added any favorites yet. Go to the <strong>Home</strong> page and like a recipe!
         </p>
       ) : (
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 sm:grid-cols-2 gap-6">
           {favorites.map((recipe) => (
             <div
               key={recipe.id}
-              className="bg-white p-4 rounded-xl shadow-md border border-gray-200"
+              className="bg-white p-4 rounded-xl shadow-md border border-gray-200 hover:shadow-2xl hover:border-solid hover:border-3 hover:border-green-500  focus:outline-green-500    transition-all duration-100"
             >
               {recipe.image ? (
                 <img
@@ -40,7 +52,7 @@ function Favorites() {
                   No Image
                 </div>
               )}
-              <h3 className="text-lg font-bold text-orange-600">
+              <h3 className="text-lg font-bold text-green-600">
                 {recipe.recipeName}
               </h3>
               <p><strong>Ingredients:</strong> {recipe.ingredients}</p>
