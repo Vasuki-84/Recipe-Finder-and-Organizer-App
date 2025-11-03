@@ -27,6 +27,15 @@ function Profile() {
       navigate("/login"); // redirect if user mismatched or not logged in
     }
   }, [id, navigate]);
+  useEffect(() => {
+  if (!loggedInUser) return;
+
+  axios
+    .get(`http://localhost:5000/recipes?userEmail=${loggedInUser.email}`)
+    .then((res) => setRecipes(res.data))
+    .catch((err) => console.error("Error fetching recipes:", err));
+}, [loggedInUser]);
+
 
   //  Fetch recipes from db.json
   useEffect(() => {
@@ -55,37 +64,35 @@ function Profile() {
       userId: loggedInUser?.id, // if you have unique IDs
     };
 
-    try {
-      if (editingRecipe) {
-        //  Update existing recipe
-        const res = await axios.put(
-          `http://localhost:5000/recipes/${editingRecipe.id}`,
-          recipeData
-        );
-        setRecipes(
-          recipes.map((r) => (r.id === editingRecipe.id ? res.data : r))
-        );
-        setEditingRecipe(null);
-      } else {
-        //  Add new recipe
-        const newRecipe = { id: Date.now(), ...recipeData };
-        const res = await axios.post(
-          "http://localhost:5000/recipes",
-          newRecipe
-        );
-        setRecipes([...recipes, res.data]);
-      }
-
-      //  Reset form
-      setRecipeName("");
-      setIngredients("");
-      setDescription("");
-      setImage("");
-      setImagePreview(null);
-    } catch (err) {
-      console.error("Error saving recipe:", err);
+   try {
+    if (editingRecipe) {
+      // Update existing recipe
+      const res = await axios.put(
+        `http://localhost:5000/recipes/${editingRecipe.id}`,
+        recipeData
+      );
+      setRecipes(recipes.map((r) => (r.id === editingRecipe.id ? res.data : r)));
+      setEditingRecipe(null);
+    } else {
+      // ➕ Add new recipe (let JSON Server assign ID automatically)
+      const res = await axios.post("http://localhost:5000/recipes", recipeData);
+      setRecipes([...recipes, res.data]);
     }
-  };
+    
+    // Reset form
+    setRecipeName("");
+    setIngredients("");
+    setDescription("");
+    setImage("");
+    setImagePreview(null);
+  } catch (err) {
+    console.error("Error saving recipe:", err);
+    alert("Something went wrong. Please try again.");
+  }
+};
+
+
+   
 
   //  Edit recipe
   const handleEdit = (recipe) => {
@@ -99,13 +106,16 @@ function Profile() {
 
   //  Delete recipe
   const handleDelete = async (id) => {
-    try {
-      await axios.delete(`http://localhost:5000/recipes/${id}`);
-      setRecipes(recipes.filter((r) => r.id !== id));
-    } catch (err) {
-      console.error("Error deleting recipe:", err);
-    }
-  };
+  const confirmDelete = window.confirm("Are you sure you want to delete this recipe?");
+  if (!confirmDelete) return;
+
+  try {
+    await axios.delete(`http://localhost:5000/recipes/${id}`);
+    setRecipes(recipes.filter((r) => r.id !== id));
+  } catch (err) {
+    console.error("Error deleting recipe:", err);
+  }
+};
 
   //  Logout
   const handleLogout = () => {
@@ -140,12 +150,12 @@ function Profile() {
         <h1 className="text-3xl font-semibold">
           Welcome, {loggedInUser?.name || "User"}!
         </h1>
-        <button
+        {/* <button
           onClick={handleLogout}
           className="flex items-center gap-2 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
         >
           <LogOut size={18} /> Logout
-        </button>
+        </button> */}
       </div>
 
       {/* User Info */}
