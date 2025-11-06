@@ -15,6 +15,7 @@ function Login() {
     e.preventDefault();
 
     try {
+      // to fetch the datas from sign up
       const res = await axios.get("http://localhost:5000/users");
 
       //  Check user credentials
@@ -24,6 +25,9 @@ function Login() {
 
       if (user) {
         //  Store user in Redux + localStorage
+        // When someone logs in → they’re “inside” (stored in localStorage).
+        // When they log out → they’re removed from localStorage,but their record remains in the database (db.json).
+        
         dispatch(login(user));
         localStorage.setItem("loggedInUser", JSON.stringify(user));
 

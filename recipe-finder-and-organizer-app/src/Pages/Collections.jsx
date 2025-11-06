@@ -88,7 +88,11 @@ function Collections() {
                 <h2 className="text-xl font-semibold text-green-700">
                   {item.title}
                 </h2>
+                     <p className="text-gray-600 mt-2 text-sm line-clamp-2">
+                  <strong>Ingredients: </strong>{item.ingredients}
+                </p>
                 <p className="text-gray-600 mt-2 text-sm line-clamp-2">
+                  <strong>Description: </strong>
                   {item.description}
                 </p>
                 <div className="mt-3">

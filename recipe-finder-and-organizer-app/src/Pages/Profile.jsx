@@ -260,7 +260,7 @@ function Profile() {
               <p className="text-sm text-gray-700 mt-1">
                 <strong>Ingredients:</strong> {r.ingredients}
               </p>
-              <p className="text-sm text-gray-600 mt-1">{r.description}</p>
+              <p className="text-sm text-gray-600 mt-1">  <strong>Description: </strong>{r.description}</p>
 
               {/*  Edit & Delete buttons */}
               <div className="flex justify-end gap-3 mt-3">

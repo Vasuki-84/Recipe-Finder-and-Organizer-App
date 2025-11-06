@@ -74,9 +74,9 @@ function Signup() {
 
       await axios.post("http://localhost:5000/users", newUser);
 
-      //  Save sign-up state (for Navbar) and trigger UI update
+      //  Save sign-up  (for Navbar) 
       localStorage.setItem("signedUpUser", JSON.stringify(newUser));
-      window.dispatchEvent(new Event("storage")); // Instantly update Navbar
+      window.dispatchEvent(new Event("storage")); // Instantly update Navbar even we close and open the browser 
 
       setMessage("Signup successful! Redirecting to Login...");
       setError("");
